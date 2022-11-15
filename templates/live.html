@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="counter" id="counter">
-        {{ game.counter }}
+    <div class="counter">
+        Generation: <span id="counter">{{ game.counter }}</span>
     </div>
-    <a href="/" class="btn btn-warning home">Home</a>
-    <a href="/live" class="btn btn-info refresh">Refresh</a>
+    <a href="{{ url_for('index') }}" class="btn btn-warning home">Home</a>
     <table class="world">
 
         {% for i in range(game.world|length) %}
