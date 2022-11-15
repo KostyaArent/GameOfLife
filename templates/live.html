@@ -27,27 +27,6 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        {#axios.get('/api/v1.0/generation')#}
-        {#    .then(function (response) {#}
-        {#        // handle success#}
-        {#        console.log(response);#}
-        {#        for ([i, x] of response.data.world.entries()){#}
-        {#              for ([j, y]  in x.entries()){#}
-        {#                  if (y){#}
-        {#                      document.getElementById(`${i}_${j}`).className = "cell living-cell";#}
-        {#                  } else if(!y && response.data.old_world[i][j]) {#}
-        {#                      document.getElementById(`${i}_${j}`).className = "cell dead-cell";#}
-        {#                  } else {#}
-        {#                      document.getElementById(`${i}_${j}`).className = "cell";#}
-        {#                  }#}
-        {#              }#}
-        {#          }#}
-        {#          document.getElementById("counter").textContent = response.data.counter;#}
-        {#      })#}
-        {#    .catch(function (error) {#}
-        {#        // handle error#}
-        {#        console.log(error);#}
-        {#      });#}
         setInterval(function() {
                   axios.get('/api/v1.0/generation')
             .then(function (response) {
