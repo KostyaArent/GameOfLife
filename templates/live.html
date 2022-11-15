@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="counter">
+    <div class="counter" id="counter">
         {{ game.counter }}
     </div>
     <a href="/" class="btn btn-warning home">Home</a>
     <a href="/live" class="btn btn-info refresh">Refresh</a>
     <table class="world">
+
         {% for i in range(game.world|length) %}
             <tr>
             {%  for j in range(game.world[i]|length) %}
                 {% if game.world[i][j] %}
-                    <td class="cell living-cell"></td>
+                    <td class="cell living-cell" id="{{ i }}_{{ j }}"></td>
                 {% elif not game.world[i][j] and game.old_world[i][j] %}
-                    <td class="cell dead-cell"></td>
+                    <td class="cell dead-cell" id="{{ i }}_{{ j }}"></td>
                 {% else %}
-                    <td class="cell"></td>
+                    <td class="cell" id="{{ i }}_{{ j }}"></td>
                 {% endif %}
             {%  endfor %}
             </tr>
@@ -26,6 +27,49 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        setInterval(() => window.location.reload(), 1000);
+        {#axios.get('/api/v1.0/generation')#}
+        {#    .then(function (response) {#}
+        {#        // handle success#}
+        {#        console.log(response);#}
+        {#        for ([i, x] of response.data.world.entries()){#}
+        {#              for ([j, y]  in x.entries()){#}
+        {#                  if (y){#}
+        {#                      document.getElementById(`${i}_${j}`).className = "cell living-cell";#}
+        {#                  } else if(!y && response.data.old_world[i][j]) {#}
+        {#                      document.getElementById(`${i}_${j}`).className = "cell dead-cell";#}
+        {#                  } else {#}
+        {#                      document.getElementById(`${i}_${j}`).className = "cell";#}
+        {#                  }#}
+        {#              }#}
+        {#          }#}
+        {#          document.getElementById("counter").textContent = response.data.counter;#}
+        {#      })#}
+        {#    .catch(function (error) {#}
+        {#        // handle error#}
+        {#        console.log(error);#}
+        {#      });#}
+        setInterval(function() {
+                  axios.get('/api/v1.0/generation')
+            .then(function (response) {
+                // handle success
+                console.log(response);
+                for (const [i, x] of response.data.world.entries()){
+                      for (const [j, y] of x.entries()){
+                          if (y == 1){
+                              document.getElementById(`${i}_${j}`).className = "cell living-cell";
+                          } else if(y == 0 && response.data.old_world[i][j] == 1) {
+                              document.getElementById(`${i}_${j}`).className = "cell dead-cell";
+                          } else {
+                              document.getElementById(`${i}_${j}`).className = "cell";
+                          }
+                      }
+                  }
+                  document.getElementById("counter").textContent = response.data.counter;
+              })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+        }, 1000);
     </script>
 {% endblock %}
